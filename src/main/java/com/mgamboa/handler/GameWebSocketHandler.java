@@ -7,7 +7,6 @@ import java.net.InetSocketAddress;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.CountDownLatch;
 
 public class GameWebSocketHandler implements WebSocketHandler {
 
@@ -15,7 +14,7 @@ public class GameWebSocketHandler implements WebSocketHandler {
 
     private static final String RESET = "\u001B[0m";
     private static final String GREEN = "\u001B[32m";
-    private static final String CYAN = "\u001B[36m";
+//    private static final String CYAN = "\u001B[36m";
     private static final String YELLOW = "\u001B[33m";
 
     public GameWebSocketHandler() {
@@ -25,9 +24,9 @@ public class GameWebSocketHandler implements WebSocketHandler {
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         print(GREEN,"User (%s) connected at %s%n"
-                , identify(session) != null? identify(session) : session.getLocalAddress(),
+                , identify(session) != null? identify(session) : session.getRemoteAddress(),
                 new Date());
-        if(clientList.containsKey(session.getLocalAddress()))
+        if(clientList.containsKey(session.getRemoteAddress()))
             session.sendMessage(new TextMessage(String.format("Welcome back %s!", identify(session))));
         else
             askIdentity(session);
@@ -38,12 +37,12 @@ public class GameWebSocketHandler implements WebSocketHandler {
         String response = String.valueOf(message.getPayload());
 
         print(GREEN,"%s: %s%n"
-                , identify(session) != null? identify(session) : session.getLocalAddress(),
+                , identify(session) != null? identify(session) : session.getRemoteAddress(),
                 response);
 
 
         if(response.startsWith("ANSWER::"))
-            clientList.put(session.getLocalAddress(), response.substring(response.indexOf("::") + 2));
+            clientList.put(session.getRemoteAddress(), response.substring(response.indexOf("::") + 2));
         else if(response.equalsIgnoreCase("ping"))
             session.sendMessage(new TextMessage("pong"));
         else
@@ -71,7 +70,7 @@ public class GameWebSocketHandler implements WebSocketHandler {
     }
 
     private String identify(WebSocketSession session) {
-        return clientList.get(session.getLocalAddress());
+        return clientList.get(session.getRemoteAddress());
     }
 
     private void print(String color, String format, Object... args) {
