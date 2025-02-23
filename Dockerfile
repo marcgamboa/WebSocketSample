@@ -14,4 +14,4 @@ RUN chmod +x gradlew
 RUN ./gradlew clean build
 
 # Run the application
-CMD ["java", "-jar", "TicTacToeServer-v0.1.jar"]
+CMD ["java", "-jar", "/app/build/libs/TicTacToeServer-v0.1.jar"]
