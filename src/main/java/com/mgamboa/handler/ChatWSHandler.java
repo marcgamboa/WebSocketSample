@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GameWebSocketHandler implements WebSocketHandler {
+public class ChatWSHandler implements WebSocketHandler {
 
     private final Map<InetSocketAddress, String> clientList;
 
@@ -17,7 +17,7 @@ public class GameWebSocketHandler implements WebSocketHandler {
 //    private static final String CYAN = "\u001B[36m";
     private static final String YELLOW = "\u001B[33m";
 
-    public GameWebSocketHandler() {
+    public ChatWSHandler() {
         this.clientList = new HashMap<>();
     }
 
